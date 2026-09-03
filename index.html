@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Denah Secure - Supabase Only - RS Atma Husada</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<!-- ENV dan Config dipisah - JANGAN hardcode di HTML utama -->
+<script src="data:application/javascript;base64,Ly8gZW52LmpzIC0gVEVNUExBVEUgS09ORklHVVJBU0kKLy8gSkFOR0FOIGNvbW1pdCBmaWxlIGluaSBkZW5nYW4gbmlsYWkgYXNsaSBrZSBHaXQKLy8gRHVwbGlrYXQgbWVuamFkaSBlbnYubG9jYWwuanMgYXRhdSBzZXQgdmlhIHNlcnZlciBlbnZpcm9ubWVudAovLyBGaWxlIGluaSBIQU5ZQSB1bnR1ayBkZXZlbG9wbWVudCwgZGkgcHJvZHVjdGlvbiBpbmplY3QgdmlhIHNlcnZlcgoKd2luZG93LkVOViA9IHdpbmRvdy5FTlYgfHwge307CgovLyBHYW50aSBkZW5nYW4gVVJMICYgQW5vbiBLZXkgcHJvamVjdCBTdXBhYmFzZSBrYW11Ci8vIENhcmEgYW1hbjogc2V0IHZpYSBiYWNrZW5kIGluamVjdGlvbiwgYnVrYW4gaGFyZGNvZGUgZGkgcmVwbyBwdWJsaWMKd2luZG93LkVOVi5TVVBBQkFTRV9VUkwgPSAiIjsgLy8gY29udG9oOiAiaHR0cHM6Ly94eHh4eHh4eC5zdXBhYmFzZS5jbyIKd2luZG93LkVOVi5TVVBBQkFTRV9BTk9OX0tFWSA9ICIiOyAvLyBjb250b2g6ICJleUpoYkdjaU9pLi4uIgoKLy8gVW50dWsgVml0ZS9Ob2RlLCBrYW11IGJpc2EgcGFrYWkgaW1wb3J0Lm1ldGEuZW52OgovLyBleHBvcnQgY29uc3QgU1VQQUJBU0VfVVJMID0gaW1wb3J0Lm1ldGEuZW52LlZJVEVfU1VQQUJBU0VfVVJMCi8vIGV4cG9ydCBjb25zdCBTVVBBQkFTRV9BTk9OX0tFWSA9IGltcG9ydC5tZXRhLmVudi5WSVRFX1NVUEFCQVNFX0FOT05fS0VZCg=="></script>
+<script src="data:application/javascript;base64,Ly8gc3VwYWJhc2VfY29uZmlnLmpzIC0gU2VjdXJlIENsaWVudCBGYWN0b3J5Ci8vIEZpbGUgaW5pIFRJREFLIG1lbmdhbmR1bmcgVVJML0tleSBoYXJkY29kZQovLyBNZW5nYW1iaWwgZGFyaSB3aW5kb3cuRU5WIChlbnYuanMpIGF0YXUgZGFyaSBzZXJ2ZXIgaW5qZWN0aW9uCi8vIFNlbXVhIGRhdGEgZ2VkdW5nIHdhamliIGRhcmkgU3VwYWJhc2UsIHRpZGFrIGFkYSBmYWxsYmFjayBoYXJkY29kZWQKCi8vIExvYWQgc3VwYWJhc2UtanMgZGFyaSBDRE4gamlrYSBiZWx1bSBhZGEKKGZ1bmN0aW9uKCl7CiAgaWYodHlwZW9mIHN1cGFiYXNlID09PSAndW5kZWZpbmVkJyl7CiAgICBjb25zdCBzY3JpcHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTsKICAgIHNjcmlwdC5zcmMgPSAnaHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9Ac3VwYWJhc2Uvc3VwYWJhc2UtanNAMi9kaXN0L3VtZC9zdXBhYmFzZS5taW4uanMnOwogICAgZG9jdW1lbnQuaGVhZC5hcHBlbmRDaGlsZChzY3JpcHQpOwogIH0KfSkoKTsKCi8qKgogKiBCdWF0IFN1cGFiYXNlIGNsaWVudCAtIGhhbnlhIGRhcmkgRU5WLCB0aWRhayBkYXJpIGxvY2FsU3RvcmFnZQogKiBAcmV0dXJucyB7U3VwYWJhc2VDbGllbnR8bnVsbH0KICovCndpbmRvdy5jcmVhdGVTZWN1cmVTdXBhYmFzZUNsaWVudCA9IGZ1bmN0aW9uKCl7CiAgLy8gMS4gQ29iYSBhbWJpbCBkYXJpIHdpbmRvdy5FTlYgKGRpLXNldCB2aWEgZW52LmpzIGF0YXUgc2VydmVyIGluamVjdGlvbikKICBjb25zdCB1cmwgPSAod2luZG93LkVOViAmJiB3aW5kb3cuRU5WLlNVUEFCQVNFX1VSTCkgPyB3aW5kb3cuRU5WLlNVUEFCQVNFX1VSTC50cmltKCkgOiAiIjsKICBjb25zdCBrZXkgPSAod2luZG93LkVOViAmJiB3aW5kb3cuRU5WLlNVUEFCQVNFX0FOT05fS0VZKSA/IHdpbmRvdy5FTlYuU1VQQUJBU0VfQU5PTl9LRVkudHJpbSgpIDogIiI7CgogIC8vIDIuIFZhbGlkYXNpIC0gSkFOR0FOIHBha2FpIGxvY2FsU3RvcmFnZQogIGlmKCF1cmwgfHwgIWtleSl7CiAgICBjb25zb2xlLndhcm4oJ1N1cGFiYXNlIGNvbmZpZyBiZWx1bSBkaWlzaS4gSXNpIHdpbmRvdy5FTlYgZGkgZW52LmpzIGF0YXUgaW5qZWN0IHZpYSBzZXJ2ZXIuJyk7CiAgICByZXR1cm4gbnVsbDsKICB9CgogIGlmKCF1cmwuc3RhcnRzV2l0aCgnaHR0cHM6Ly8nKSl7CiAgICBjb25zb2xlLmVycm9yKCdTVVBBQkFTRV9VUkwgdGlkYWsgdmFsaWQnKTsKICAgIHJldHVybiBudWxsOwogIH0KCiAgLy8gMy4gQnVhdCBjbGllbnQgLSBoYW55YSBkaSBtZW1vcnksIHRpZGFrIGRpc2ltcGFuIGRpIGxvY2FsU3RvcmFnZQogIHRyeXsKICAgIGNvbnN0IGNsaWVudCA9IHN1cGFiYXNlLmNyZWF0ZUNsaWVudCh1cmwsIGtleSwgewogICAgICBhdXRoOiB7CiAgICAgICAgcGVyc2lzdFNlc3Npb246IGZhbHNlLCAvLyBKQU5HQU4gc2ltcGFuIHNlc3Npb24gZGkgbG9jYWxTdG9yYWdlCiAgICAgICAgYXV0b1JlZnJlc2hUb2tlbjogZmFsc2UsCiAgICAgICAgZGV0ZWN0U2Vzc2lvbkluVXJsOiBmYWxzZQogICAgICB9CiAgICB9KTsKICAgIHJldHVybiBjbGllbnQ7CiAgfWNhdGNoKGUpewogICAgY29uc29sZS5lcnJvcignR2FnYWwgYnVhdCBTdXBhYmFzZSBjbGllbnQ6JywgZSk7CiAgICByZXR1cm4gbnVsbDsKICB9Cn07CgovKioKICogSGVscGVyIHVudHVrIGxvYWQgc2VtdWEgZGF0YSAtIDEwMCUgZGFyaSBTdXBhYmFzZQogKi8Kd2luZG93LmxvYWRBbGxEYXRhRnJvbVN1cGFiYXNlID0gYXN5bmMgZnVuY3Rpb24oc3VwYWJhc2VDbGllbnQpewogIGlmKCFzdXBhYmFzZUNsaWVudCkgdGhyb3cgbmV3IEVycm9yKCdTdXBhYmFzZSBjbGllbnQgYmVsdW0gdGVyaHVidW5nJyk7CgogIGNvbnN0IFthc2FsUmVzLCB0dWp1YW5SZXMsIGhvdHNwb3RSZXNdID0gYXdhaXQgUHJvbWlzZS5hbGwoWwogICAgc3VwYWJhc2VDbGllbnQuZnJvbSgnbG9rYXNpX2FzYWwnKS5zZWxlY3QoJyonKS5vcmRlcignbmFtYV9sb2thc2knKSwKICAgIHN1cGFiYXNlQ2xpZW50LmZyb20oJ2xva2FzaV90dWp1YW4nKS5zZWxlY3QoJyonKS5vcmRlcignbm9tb3InLCB7YXNjZW5kaW5nOiB0cnVlfSksCiAgICBzdXBhYmFzZUNsaWVudC5mcm9tKCdtYXBfaG90c3BvdHMnKS5zZWxlY3QoJyonKS5vcmRlcignbm9tb3InLCB7YXNjZW5kaW5nOiB0cnVlfSkKICBdKTsKCiAgaWYoYXNhbFJlcy5lcnJvcikgdGhyb3cgYXNhbFJlcy5lcnJvcjsKICBpZih0dWp1YW5SZXMuZXJyb3IpIHRocm93IHR1anVhblJlcy5lcnJvcjsKICBpZihob3RzcG90UmVzLmVycm9yKSB0aHJvdyBob3RzcG90UmVzLmVycm9yOwoKICByZXR1cm4gewogICAgYXNhbDogYXNhbFJlcy5kYXRhIHx8IFtdLAogICAgdHVqdWFuOiB0dWp1YW5SZXMuZGF0YSB8fCBbXSwKICAgIGhvdHNwb3RzOiBob3RzcG90UmVzLmRhdGEgfHwgW10KICB9Owp9OwoKLy8gVW50dWsgTm9kZS9WaXRlIGVudmlyb25tZW50Ci8vIGV4cG9ydCB7IGNyZWF0ZVNlY3VyZVN1cGFiYXNlQ2xpZW50LCBsb2FkQWxsRGF0YUZyb21TdXBhYmFzZSB9Cg=="></script>
+<style>
+*{box-sizing:border-box;margin:0;font-family:'Segoe UI',sans-serif}
+body,html{width:100vw;height:100vh;overflow:hidden;background:#1e272e;color:#2f3640}
+#start-overlay{position:fixed;inset:0;background:#00a8ff;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;cursor:pointer;transition:.5s}
+#start-overlay h1{font-size:34px;text-align:center;margin-bottom:15px}
+#secure-badge{position:fixed;top:10px;left:10px;background:#4cd137;color:white;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:bold;z-index:1100}
+.app-container{display:flex;width:100%;height:100%}
+.sidebar{background:#f5f6fa;padding:20px;flex:1;max-width:400px;display:flex;flex-direction:column;box-shadow:3px 0 15px rgba(0,0,0,0.2);overflow-y:auto}
+.header-title{font-size:16px;text-align:center;border-bottom:3px solid #00a8ff;padding-bottom:10px;margin-bottom:12px;font-weight:bold}
+.conn-status{font-size:11px;padding:8px;border-radius:8px;text-align:center;margin-bottom:12px;font-weight:bold}
+.offline{background:#fbc531;color:#2f3640}
+.online{background:#4cd137;color:white}
+.step-title{font-size:13px;font-weight:bold;color:#e1b12c;background:#2f3640;padding:8px;border-radius:6px;text-align:center;margin:10px 0}
+.search-box{width:100%;padding:9px;border:2px solid #dcdde1;border-radius:8px;margin-bottom:8px;font-size:13px}
+.list-container{display:flex;flex-direction:column;gap:6px;max-height:35vh;overflow-y:auto}
+.btn-pilihan{background:white;padding:10px;border:2px solid #bdc3c7;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;text-align:left}
+.btn-pilihan:hover{background:#00a8ff;color:white}
+.btn-pilihan.active{border-color:#e1b12c;background:#fff9db}
+.badge{font-size:9px;padding:2px 5px;border-radius:3px;color:white}
+.badge-pengunjung{background:#4cd137}
+.badge-staff{background:#e84118}
+.map-view{flex:3;background:#dcdde1;position:relative;display:flex;justify-content:center;align-items:center;padding:15px}
+.map-wrapper{position:relative;background:white;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.3);max-width:100%;max-height:100%}
+.map-wrapper img{display:block;max-width:100%;max-height:88vh;object-fit:contain;border-radius:10px}
+.hotspot{position:absolute;background:rgba(0,168,255,0.22);border:2px dashed #00a8ff;border-radius:4px;cursor:pointer;transition:.2s}
+.hotspot:hover{background:rgba(76,209,55,0.45);border-color:#4cd137;transform:scale(1.02);z-index:10}
+.hotspot.selected{background:rgba(225,177,44,0.6);border:2px solid #e1b12c;animation:pulse 1.5s infinite}
+.hotspot-tooltip{position:absolute;bottom:105%;left:50%;transform:translateX(-50%);background:#2f3640;color:white;padding:5px 8px;border-radius:5px;font-size:10px;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}
+.hotspot:hover .hotspot-tooltip{opacity:1;bottom:115%}
+.block-overlay{position:absolute;inset:0;background:rgba(220,221,225,0.94);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:50;border-radius:10px;text-align:center;padding:20px}
+.btn-cpanel{position:absolute;top:12px;right:12px;background:#2f3640;color:white;border:2px solid #7f8fa6;padding:7px 14px;border-radius:8px;font-weight:bold;cursor:pointer;z-index:20}
+.admin-panel{position:fixed;top:0;right:-500px;width:460px;height:100%;background:#2f3640;color:white;box-shadow:-5px 0 20px rgba(0,0,0,0.5);z-index:1200;transition:right .35s;padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.admin-panel.open{right:0}
+.admin-section{background:#353b48;padding:10px;border-radius:8px;display:flex;flex-direction:column;gap:6px}
+.admin-section h3{color:#4cd137;font-size:12px;border-bottom:1px solid #7f8fa6;padding-bottom:3px}
+.admin-section input,.admin-section select,.admin-section textarea{width:100%;padding:7px;border-radius:5px;border:none;background:#f5f6fa;font-size:11px}
+.btn-save{background:#4cd137;color:white;border:none;padding:8px;border-radius:5px;font-weight:bold;cursor:pointer}
+.btn-delete{background:#e84118;color:white;border:none;padding:8px;border-radius:5px;font-weight:bold;cursor:pointer}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(225,177,44,0.7)}70%{box-shadow:0 0 0 8px rgba(225,177,44,0)}100%{box-shadow:0 0 0 0 rgba(225,177,44,0)}}
+</style>
+</head>
+<body>
+<div id="secure-badge">🔒 SECURE MODE - ENV.JS</div>
+<div id="start-overlay" onclick="this.style.display='none'">
+<h1>DENAH DIGITAL<br>RSJD ATMA HUSADA MAHAKAM</h1>
+<p>Secure - Data 100% dari Supabase via env.js</p>
+</div>
 
+<div class="app-container">
+<div class="sidebar">
+<div class="header-title">DENAH DIGITAL - SECURE<br><small style="font-size:10px;color:#7f8fa6">env.js + supabase_config.js</small></div>
+<div id="conn-status" class="conn-status offline">Memeriksa env.js...</div>
+
+<div class="step-title">📍 LOKASI ANDA</div>
+<input id="search-asal" class="search-box" placeholder="Cari lokasi asal..." oninput="filterAsal()">
+<div id="list-asal" class="list-container"></div>
+
+<div class="step-title">🎯 TUJUAN</div>
+<input id="search-tujuan" class="search-box" placeholder="Cari gedung / nomor..." oninput="filterTujuan()">
+<div id="list-tujuan" class="list-container"></div>
+
+<div id="detail-panel" style="display:none;margin-top:12px;background:white;padding:12px;border-radius:8px;border-left:4px solid #00a8ff">
+<h4 id="detail-nama" style="font-size:13px"></h4>
+<p id="detail-info" style="font-size:11px;color:#57606f;margin-top:4px"></p>
+<p id="detail-rute" style="font-size:10px;background:#f5f6fa;padding:6px;border-radius:5px;margin-top:6px"></p>
+</div>
+
+<div style="margin-top:12px;padding:10px;background:#fff3cd;border-radius:8px;font-size:10px;color:#856404">
+<strong>Keamanan:</strong> URL & Key diambil dari <code>env.js</code> → <code>window.ENV</code>. Tidak disimpan di localStorage. File <code>env.js</code> harus di-gitignore di production.
+</div>
+</div>
+
+<div class="map-view">
+<div id="interactive-map" class="map-wrapper">
+<img id="map-img" src="./clean_floor_plan.webp" alt="Denah RS" onerror="this.src='https://via.placeholder.com/800x800/FFFFFF/2f3640?text=Denah+RS'">
+<div id="block-overlay" class="block-overlay">
+<h3>🔒 Menunggu Supabase</h3>
+<p id="block-msg" style="font-size:12px;color:#57606f;margin:10px 0">Memeriksa env.js...</p>
+<button onclick="initApp()" style="background:#00a8ff;color:white;border:none;padding:10px 18px;border-radius:8px;font-weight:bold;cursor:pointer">Coba Hubungkan Ulang</button>
+<pre id="env-debug" style="font-size:9px;background:#f5f6fa;padding:6px;border-radius:4px;margin-top:10px;text-align:left;max-width:280px;overflow:auto"></pre>
+</div>
+</div>
+<button class="btn-cpanel" onclick="toggleAdmin()">⚙️ Admin</button>
+</div>
+</div>
+
+<div id="admin-panel" class="admin-panel">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h2 style="font-size:16px">Admin Panel - Supabase Only</h2>
+<button onclick="toggleAdmin()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer">✕</button>
+</div>
+<p style="font-size:10px;color:#fbc531">CRUD langsung ke Supabase. Tidak ada data lokal.</p>
+
+<div class="admin-section">
+<h3>Lokasi Asal</h3>
+<select id="admin-select-asal"></select>
+<input id="admin-nama-asal" placeholder="Nama lokasi">
+<div style="display:flex;gap:6px"><button class="btn-save" style="flex:1" onclick="simpanAsal()">Simpan</button><button class="btn-delete" style="flex:1" onclick="hapusAsal()">Hapus</button></div>
+</div>
+
+<div class="admin-section">
+<h3>Tujuan (43 Gedung)</h3>
+<select id="admin-select-tujuan"></select>
+<input id="admin-nomor" placeholder="Nomor" type="number">
+<input id="admin-nama-tujuan" placeholder="Nama gedung">
+<select id="admin-akses"><option value="PENGUNJUNG">PENGUNJUNG</option><option value="STAFF">STAFF</option></select>
+<textarea id="admin-instruksi" placeholder="Instruksi rute"></textarea>
+<input id="admin-tanda" placeholder="Gambar tanda">
+<div style="display:flex;gap:6px"><button class="btn-save" style="flex:1" onclick="simpanTujuan()">Simpan</button><button class="btn-delete" style="flex:1" onclick="hapusTujuan()">Hapus</button></div>
+</div>
+
+<div class="admin-section">
+<h3>Hotspot Peta</h3>
+<select id="admin-select-hotspot"></select>
+<input id="hs-nama" placeholder="Nama bangunan">
+<input id="hs-target" placeholder="Target lokasi">
+<div style="display:flex;gap:4px"><input id="hs-top" placeholder="Top %" type="number" step="0.1"><input id="hs-left" placeholder="Left %" type="number" step="0.1"></div>
+<div style="display:flex;gap:4px"><input id="hs-width" placeholder="Width %" type="number" step="0.1"><input id="hs-height" placeholder="Height %" type="number" step="0.1"></div>
+<div style="display:flex;gap:6px"><button class="btn-save" style="flex:1" onclick="simpanHotspot()">Simpan</button><button class="btn-delete" style="flex:1" onclick="hapusHotspot()">Hapus</button></div>
+</div>
+
+<button onclick="loadAllData()" style="background:#00a8ff;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer">🔄 Refresh dari Supabase</button>
+</div>
+
+<script>
+// Global state - hanya di memory, tidak di localStorage
+let supabaseClient = null;
+let dataAsal = [], dataTujuan = [], dataHotspots = [];
+let selectedAsal = null, selectedTujuan = null;
+
+async function initApp(){
+  const statusEl = document.getElementById('conn-status');
+  const blockMsg = document.getElementById('block-msg');
+  const debugEl = document.getElementById('env-debug');
+  
+  // Debug ENV
+  const envInfo = window.ENV ? JSON.stringify({
+    url_set: !!window.ENV.SUPABASE_URL,
+    key_set: !!window.ENV.SUPABASE_ANON_KEY,
+    url_preview: window.ENV.SUPABASE_URL ? window.ENV.SUPABASE_URL.substring(0,25)+'...' : 'KOSONG'
+  }, null, 2) : 'window.ENV tidak ada - cek env.js';
+  debugEl.textContent = envInfo;
+
+  // Buat client via supabase_config.js - tidak pakai localStorage
+  supabaseClient = window.createSecureSupabaseClient ? window.createSecureSupabaseClient() : null;
+  
+  if(!supabaseClient){
+    statusEl.className = 'conn-status offline';
+    statusEl.textContent = '🔴 ENV belum diisi - Edit env.js';
+    blockMsg.textContent = 'Isi SUPABASE_URL & ANON_KEY di env.js, lalu refresh.';
+    document.getElementById('block-overlay').style.display = 'flex';
+    return;
+  }
+
+  statusEl.className = 'conn-status online';
+  statusEl.textContent = '🟢 Terhubung: ' + (window.ENV.SUPABASE_URL ? new URL(window.ENV.SUPABASE_URL).hostname : 'Supabase') + ' (memory only)';
+  document.getElementById('block-overlay').style.display = 'none';
+  await loadAllData();
+}
+
+async function loadAllData(){
+  if(!supabaseClient) return;
+  try{
+    const result = await window.loadAllDataFromSupabase(supabaseClient);
+    dataAsal = result.asal;
+    dataTujuan = result.tujuan;
+    dataHotspots = result.hotspots;
+    renderAsal(); renderTujuan(); renderHotspots(); renderAdminSelects();
+  }catch(e){
+    alert('Gagal load dari Supabase: ' + e.message + '\nPastikan tabel sudah dibuat via SQL seed.');
+    console.error(e);
+  }
+}
+
+function renderAsal(){
+  const c=document.getElementById('list-asal'); c.innerHTML='';
+  const q=(document.getElementById('search-asal').value||'').toLowerCase();
+  dataAsal.filter(r=>r.nama_lokasi.toLowerCase().includes(q)).forEach(row=>{
+    const b=document.createElement('button'); b.className='btn-pilihan'+(selectedAsal===row.nama_lokasi?' active':'');
+    b.textContent=row.nama_lokasi;
+    b.onclick=()=>{selectedAsal=row.nama_lokasi; document.querySelectorAll('#list-asal .btn-pilihan').forEach(x=>x.classList.remove('active')); b.classList.add('active'); updateDetail();};
+    c.appendChild(b);
+  });
+}
+
+function renderTujuan(){
+  const c=document.getElementById('list-tujuan'); c.innerHTML='';
+  const q=(document.getElementById('search-tujuan').value||'').toLowerCase();
+  const filtered=dataTujuan.filter(r=>(r.nama_lokasi+' '+r.nomor+' '+(r.akses||'')).toLowerCase().includes(q));
+  filtered.forEach(row=>{
+    const b=document.createElement('button'); b.className='btn-pilihan'+(selectedTujuan===row.nama_lokasi?' active':'');
+    b.innerHTML='<span>['+row.nomor+'] '+row.nama_lokasi+'</span><br><span class="badge '+(row.akses==='PENGUNJUNG'?'badge-pengunjung':'badge-staff')+'">'+(row.akses||'')+'</span>';
+    b.onclick=()=>{selectedTujuan=row.nama_lokasi; document.querySelectorAll('#list-tujuan .btn-pilihan').forEach(x=>x.classList.remove('active')); b.classList.add('active'); highlightHotspot(row.nomor); updateDetail();};
+    c.appendChild(b);
+  });
+  document.querySelectorAll('.hotspot').forEach(h=>{
+    const num=parseInt(h.dataset.nomor); const match=filtered.some(f=>f.nomor===num);
+    h.classList.toggle('dimmed', q && !match);
+  });
+}
+
+function renderHotspots(){
+  const map=document.getElementById('interactive-map');
+  map.querySelectorAll('.hotspot').forEach(e=>e.remove());
+  dataHotspots.forEach(row=>{
+    const d=document.createElement('div'); d.className='hotspot'; d.dataset.nomor=row.nomor;
+    d.style.top=row.pos_top+'%'; d.style.left=row.pos_left+'%'; d.style.width=row.width+'%'; d.style.height=row.height+'%';
+    d.innerHTML='<div class="hotspot-tooltip">['+row.nomor+'] '+row.nama_bangunan+'</div>';
+    d.onclick=()=>{const t=dataTujuan.find(x=>x.nomor===row.nomor); if(t){selectedTujuan=t.nama_lokasi; renderTujuan(); updateDetail(); highlightHotspot(t.nomor);}};
+    map.appendChild(d);
+  });
+}
+
+function highlightHotspot(n){document.querySelectorAll('.hotspot').forEach(h=>h.classList.remove('selected')); const t=document.querySelector('.hotspot[data-nomor="'+n+'"]'); if(t) t.classList.add('selected');}
+function updateDetail(){
+  if(!selectedTujuan) return; const t=dataTujuan.find(x=>x.nama_lokasi===selectedTujuan); if(!t) return;
+  document.getElementById('detail-panel').style.display='block';
+  document.getElementById('detail-nama').textContent='['+t.nomor+'] '+t.nama_lokasi;
+  document.getElementById('detail-info').textContent='Akses: '+(t.akses||'-')+' | Dari: '+(selectedAsal||'Belum pilih');
+  document.getElementById('detail-rute').textContent=t.instruksi||'';
+}
+function filterAsal(){renderAsal();} function filterTujuan(){renderTujuan();}
+function toggleAdmin(){document.getElementById('admin-panel').classList.toggle('open');}
+function renderAdminSelects(){
+  const sA=document.getElementById('admin-select-asal'); sA.innerHTML='<option value="">-- Pilih --</option>'; dataAsal.forEach(r=>sA.innerHTML+='<option value="'+r.id+'">'+r.nama_lokasi+'</option>');
+  sA.onchange=()=>{const r=dataAsal.find(x=>x.id===sA.value); document.getElementById('admin-nama-asal').value=r?r.nama_lokasi:'';};
+  const sT=document.getElementById('admin-select-tujuan'); sT.innerHTML='<option value="">-- Pilih --</option>'; dataTujuan.forEach(r=>sT.innerHTML+='<option value="'+r.id+'">['+r.nomor+'] '+r.nama_lokasi+'</option>');
+  sT.onchange=()=>{const r=dataTujuan.find(x=>x.id===sT.value); if(r){document.getElementById('admin-nomor').value=r.nomor; document.getElementById('admin-nama-tujuan').value=r.nama_lokasi; document.getElementById('admin-akses').value=r.akses; document.getElementById('admin-instruksi').value=r.instruksi; document.getElementById('admin-tanda').value=r.gambar_tanda;}};
+  const sH=document.getElementById('admin-select-hotspot'); sH.innerHTML='<option value="">-- Pilih --</option>'; dataHotspots.forEach(r=>sH.innerHTML+='<option value="'+r.id+'">['+r.nomor+'] '+r.nama_bangunan+'</option>');
+  sH.onchange=()=>{const r=dataHotspots.find(x=>x.id===sH.value); if(r){document.getElementById('hs-nama').value=r.nama_bangunan; document.getElementById('hs-target').value=r.target_lokasi; document.getElementById('hs-top').value=r.pos_top; document.getElementById('hs-left').value=r.pos_left; document.getElementById('hs-width').value=r.width; document.getElementById('hs-height').value=r.height;}};
+}
+async function simpanAsal(){const n=document.getElementById('admin-nama-asal').value.trim();const id=document.getElementById('admin-select-asal').value;if(!n) return;if(id) await supabaseClient.from('lokasi_asal').update({nama_lokasi:n}).eq('id',id); else await supabaseClient.from('lokasi_asal').insert([{nama_lokasi:n}]);await loadAllData();}
+async function hapusAsal(){const id=document.getElementById('admin-select-asal').value;if(!id) return;if(confirm('Hapus?')){await supabaseClient.from('lokasi_asal').delete().eq('id',id);await loadAllData();}}
+async function simpanTujuan(){const id=document.getElementById('admin-select-tujuan').value;const p={nomor:parseInt(document.getElementById('admin-nomor').value)||null,nama_lokasi:document.getElementById('admin-nama-tujuan').value.trim(),akses:document.getElementById('admin-akses').value,instruksi:document.getElementById('admin-instruksi').value.trim(),gambar_tanda:document.getElementById('admin-tanda').value.trim()};if(!p.nama_lokasi) return;if(id) await supabaseClient.from('lokasi_tujuan').update(p).eq('id',id); else await supabaseClient.from('lokasi_tujuan').insert([p]);await loadAllData();}
+async function hapusTujuan(){const id=document.getElementById('admin-select-tujuan').value;if(!id) return;if(confirm('Hapus?')){await supabaseClient.from('lokasi_tujuan').delete().eq('id',id);await loadAllData();}}
+async function simpanHotspot(){const id=document.getElementById('admin-select-hotspot').value;const p={nama_bangunan:document.getElementById('hs-nama').value.trim(),target_lokasi:document.getElementById('hs-target').value.trim(),pos_top:parseFloat(document.getElementById('hs-top').value),pos_left:parseFloat(document.getElementById('hs-left').value),width:parseFloat(document.getElementById('hs-width').value),height:parseFloat(document.getElementById('hs-height').value),nomor:parseInt(document.getElementById('admin-nomor').value)||null};if(!p.nama_bangunan) return;if(id) await supabaseClient.from('map_hotspots').update(p).eq('id',id); else await supabaseClient.from('map_hotspots').insert([p]);await loadAllData();}
+async function hapusHotspot(){const id=document.getElementById('admin-select-hotspot').value;if(!id) return;if(confirm('Hapus?')){await supabaseClient.from('map_hotspots').delete().eq('id',id);await loadAllData();}}
+
+// Auto init
+window.addEventListener('DOMContentLoaded', ()=>{ setTimeout(initApp, 800); });
+</script>
+</body>
+</html>
